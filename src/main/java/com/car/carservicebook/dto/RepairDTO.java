@@ -15,6 +15,8 @@ public class RepairDTO {
 
     Long car_id;
 
+    Long repair_id;
+
     int price;
 
     String date;

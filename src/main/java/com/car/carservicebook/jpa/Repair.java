@@ -25,8 +25,10 @@ public class Repair {
 
     String date;
 
-    @OneToMany(mappedBy = "repair" , cascade = CascadeType.ALL)
-    List<RepairName> repairName;
+    Long repair_id;
+
+    //@OneToMany(mappedBy = "repair" , cascade = CascadeType.ALL)
+    //List<RepairName> repairName;
 
     @JsonIgnore
     @ManyToOne

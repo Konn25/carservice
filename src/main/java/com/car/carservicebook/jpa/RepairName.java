@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -22,7 +24,7 @@ public class RepairName {
     String repairName;
 
     @JsonIgnore
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "repair_id")
-    Repair repair;
+    List<Repair> repair;
 }
