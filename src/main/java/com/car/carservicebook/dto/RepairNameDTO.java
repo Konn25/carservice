@@ -13,8 +13,6 @@ public class RepairNameDTO {
     @JsonIgnore
     Long id;
 
-    Long repair_id;
-
     String repair_name;
 
 
