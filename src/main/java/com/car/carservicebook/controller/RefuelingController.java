@@ -57,12 +57,26 @@ public class RefuelingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(modelMapper.map(refuelingResponse, Car.class)));
     }
 
-    @PostMapping("/car/refuel/update")
+    @PostMapping("/car/refuel/update/{id}")
     @ResponseBody
     @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Update a refueling data", description = "Update refueling data in the database")
-    public Refueling updateRefueling(@RequestBody Refueling refueling) {
-        return refuelingService.updateRefueling(refueling);
+    public ResponseEntity<String> updateRefueling(@PathVariable("id") Long id, @RequestBody RefuelingDTO refuelingDTO) {
+
+        Refueling refuelingRequest = modelMapper.map(refuelingDTO, Refueling.class);
+        refuelingRequest.setId(id);
+
+        Car updateCar = new Car();
+
+        updateCar.setId(refuelingDTO.getCar_id());
+
+
+        refuelingRequest.setCar(updateCar);
+
+
+        refuelingService.updateRefueling(refuelingRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Update refuel");
     }
 
     @DeleteMapping("/car/refuel/delete/{id}")
