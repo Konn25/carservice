@@ -45,10 +45,6 @@ public class RepairNameController {
 
         RepairName repairNameRequest = modelMapper.map(repairNameDTO, RepairName.class);
 
-        Repair repair = repairService.getRepairById(repairNameDTO.getId());
-
-        //repairNameRequest.setRepair(repair);
-
         RepairName newRepairName = repairNameService.createNewRepairName(repairNameRequest);
 
         RepairNameDTO repairNameResponse = modelMapper.map(newRepairName, RepairNameDTO.class);

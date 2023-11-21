@@ -27,9 +27,6 @@ public class Repair {
 
     Long repair_id;
 
-    //@OneToMany(mappedBy = "repair" , cascade = CascadeType.ALL)
-    //List<RepairName> repairName;
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "car_id")
