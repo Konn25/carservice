@@ -16,6 +16,8 @@
         car_id bigint,
         id bigserial not null,
         name varchar(255),
+        type varchar(255),
+        image_data oid,
         primary key (id)
     );
 
