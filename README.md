@@ -27,4 +27,4 @@ Use this for access the endpoints: http://localhost:8080/swagger-ui/index.html#/
 
 ## Frontend
 
-Soon I will upload the frontend for this project.
+You can download the frontend for this project here: https://github.com/Konn25/carservice_frontend
