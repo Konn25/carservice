@@ -1,18 +1,21 @@
 package com.car.carservicebook.controller;
 
-import com.car.carservicebook.dto.PictureDTO;
 import com.car.carservicebook.jpa.Picture;
 import com.car.carservicebook.service.PictureService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
@@ -23,17 +26,33 @@ public class PictureController {
 
     private final PictureService pictureService;
 
-    private final ModelMapper modelMapper;
-
     @GetMapping("/car/picture/{id}")
+    @Transactional
     @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get user's picture", description = "Return user's picture by id")
-    public List<Picture> getCarPicture(@PathVariable("id") Long id) {
-        return pictureService.getPictureById(id);
+    public ResponseEntity<?> getCarPicture(@PathVariable("id") Long id) {
+
+        Optional<Picture> pictureList = pictureService.getPictureById(id);
+
+        byte[] image = pictureService.getImage(pictureList.get().getId(), pictureList.get().getName());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                                           .contentType(MediaType.valueOf("image/png"))
+                                           .body(image);
+    }
+
+    @GetMapping("/car/pictures/{id}")
+    @SecurityRequirement(name = "bearerToken")
+    @Transactional
+    @Operation(summary = "Get user's picture", description = "Return user's picture by id")
+    public List<Picture> getCarAllPicture(@PathVariable("id") Long carId) {
+
+        return pictureService.getCarAllPicture(carId);
     }
 
     @DeleteMapping("/car/picture/delete/{id}")
     @ResponseBody
+    @Transactional
     @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Delete a car picture by id", description = "Delete a car picture by id from the database")
     public ResponseEntity<String> deletePictureById(@PathVariable("id") Long id) {
@@ -41,20 +60,15 @@ public class PictureController {
         return ResponseEntity.status(HttpStatus.OK).body("Car picture deleted!");
     }
 
-    @PostMapping("/car/picture/new")
+    @PostMapping("/car/picture/new/{carId}")
     @ResponseBody
     @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Create new picture", description = "Create new picture for the appropriate car")
-    public ResponseEntity<String> createNewPicture(@RequestBody PictureDTO pictureDTO) {
+    public ResponseEntity<?> createNewPicture(@RequestParam("image") MultipartFile file, @PathVariable("carId") Long carId) throws IOException {
 
-        Picture pictureRequest = modelMapper.map(pictureDTO, Picture.class);
+        pictureService.createNewPicture(file, carId);
 
-        Picture newPicture = pictureService.createNewPicture(pictureRequest);
-
-        PictureDTO pictureResponse = modelMapper.map(newPicture, PictureDTO.class);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("New picture created!" + pictureResponse.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
 
 }

@@ -16,4 +16,9 @@ public class PictureDTO {
     Long car_id;
 
     String name;
+
+    String type;
+
+    byte[] imageData;
+
 }

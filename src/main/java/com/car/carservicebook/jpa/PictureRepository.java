@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface PictureRepository extends JpaRepository<Picture, Long> {
 
-    List<Picture> findPictureById(Long id);
+    Optional<Picture> findPictureById(Long id);
 
     Optional<Picture> findOnePictureById(Long id);
+
+    Optional<Picture> findByIdAndName(Long id,String name);
+
+    List<Picture> findPictureByCarId(Long id);
 
 }
