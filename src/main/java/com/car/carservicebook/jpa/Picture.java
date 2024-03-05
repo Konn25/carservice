@@ -28,7 +28,6 @@ public class Picture {
 
     @Lob
     @Column(length = 1000)
-    //@JdbcTypeCode(Types.LONGVARBINARY)
     byte[] imageData;
 
     @ManyToOne
