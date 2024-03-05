@@ -34,11 +34,18 @@ public class PictureController {
 
         Optional<Picture> pictureList = pictureService.getPictureById(id);
 
-        byte[] image = pictureService.getImage(pictureList.get().getId(), pictureList.get().getName());
+        if (pictureList.isPresent()) {
+            byte[] image = pictureService.getImage(pictureList.get().getId(), pictureList.get().getName());
 
-        return ResponseEntity.status(HttpStatus.OK)
-                                           .contentType(MediaType.valueOf("image/png"))
-                                           .body(image);
+            return ResponseEntity.status(HttpStatus.OK)
+                                 .contentType(MediaType.valueOf("image/png"))
+                                 .body(image);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+
     }
 
     @GetMapping("/car/pictures/{id}")
@@ -64,7 +71,8 @@ public class PictureController {
     @ResponseBody
     @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Create new picture", description = "Create new picture for the appropriate car")
-    public ResponseEntity<?> createNewPicture(@RequestParam("image") MultipartFile file, @PathVariable("carId") Long carId) throws IOException {
+    public ResponseEntity<?> createNewPicture(@RequestParam("image") MultipartFile file,
+                                              @PathVariable("carId") Long carId) throws IOException {
 
         pictureService.createNewPicture(file, carId);
 
