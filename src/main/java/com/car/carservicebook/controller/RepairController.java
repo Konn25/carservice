@@ -33,8 +33,6 @@ public class RepairController {
 
     private final ModelMapper modelMapper;
 
-    private final UserService userService;
-
     @GetMapping("/car/repair/{carId}")
     @ResponseBody
     @SecurityRequirement(name = "bearerToken")
@@ -89,15 +87,21 @@ public class RepairController {
         Optional<Car> foundCar = carService.getCarById(repairDTO.getCar_id());
 
         Car newCar = new Car();
-        newCar.setId(foundCar.get().getId());
+        if(foundCar.isPresent()){
+            newCar.setId(foundCar.get().getId());
 
-        repairRequest.setCar(newCar);
+            repairRequest.setCar(newCar);
 
-        Repair newRepair = repairService.updateRepair(repairRequest);
+            Repair newRepair = repairService.updateRepair(repairRequest);
 
-        RepairDTO repairResponse = modelMapper.map(newRepair, RepairDTO.class);
+            RepairDTO repairResponse = modelMapper.map(newRepair, RepairDTO.class);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Car updated! Id:");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Car updated! Id:");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Car not updated!!!");
+        }
+
     }
 
 
