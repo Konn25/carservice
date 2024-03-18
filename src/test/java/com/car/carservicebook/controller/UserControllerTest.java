@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -96,7 +97,7 @@ class UserControllerTest {
     }
 
     @Test
-    void createNewUser() {
+    void createNewUser() throws NoSuchAlgorithmException {
 
         //GIVEN
         given(modelMapper.map(user, UserDTO.class)).willReturn(userDTO);
