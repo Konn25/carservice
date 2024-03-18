@@ -12,6 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,15 +41,23 @@ public class UserController {
     @PostMapping("/user/new")
     @ResponseBody
     @Operation(summary = "Create new user", description  = "Create new user")
-    public ResponseEntity<String> createNewUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<String> createNewUser(@RequestBody UserDTO userDTO) throws NoSuchAlgorithmException {
 
         User userRequest = modelMapper.map(userDTO, User.class);
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        md.update(userRequest.getPassword().getBytes(StandardCharsets.UTF_8));
+
+        byte[] digest = md.digest();
+
+        userRequest.setPassword(String.format("%064x", new BigInteger(1,digest)));
 
         User newUser = userService.createNewUser(userRequest);
 
         UserDTO userResponse = modelMapper.map(newUser, UserDTO.class);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(userResponse));
+        return ResponseEntity.status(HttpStatus.CREATED).body("User created");
     }
 
 
