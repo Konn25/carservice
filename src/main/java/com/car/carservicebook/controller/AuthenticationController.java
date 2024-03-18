@@ -15,6 +15,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 @RestController
 @RequestMapping("/v1")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -27,15 +32,30 @@ public class AuthenticationController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("/authenticate")
-    @Operation(summary = "Generate an authentication token", description  = "Return an authentication token (user or admin)")
-    public ResponseEntity<String> authUser(@RequestBody AuthenticationDTO request){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
-        );
+    @Operation(summary = "Generate an authentication token", description = "Return an authentication token (user or admin)")
+    public ResponseEntity<String> authUser(@RequestBody AuthenticationDTO request) throws NoSuchAlgorithmException {
 
         final UserDetails userDetails = userDAO.findUserByEmail(request.getEmail());
-        if(userDetails != null){
-            return ResponseEntity.ok().body(jwtUtils.generateToken(userDetails));
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        md.update(request.getPassword().getBytes(StandardCharsets.UTF_8));
+
+        byte[] digest = md.digest();
+
+        String encodedPassword = String.format("%064x", new BigInteger(1, digest));
+
+        if (userDetails != null) {
+
+            if (userDetails.getPassword().equals(encodedPassword)) {
+
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(request.getEmail(), encodedPassword)
+                );
+
+                return ResponseEntity.ok().body(jwtUtils.generateToken(userDetails));
+            }
+
         }
 
         return ResponseEntity.status(HttpStatusCode.valueOf(403)).body("Some error has occurred");
