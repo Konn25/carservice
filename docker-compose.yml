@@ -1,8 +1,26 @@
 version: '3.5'
 
 services:
+  app:
+    image: docker-spring-boot-postgres
+    build:
+      context: .
+    container_name: car_service_book_app
+    depends_on:
+      - db
+    environment:
+      POSTGRES_USER: super_admin
+      POSTGRES_PASSWORD: SomeSecretPassword
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/car_service
+      SPRING_DATASOURCE_USERNAME: super_admin
+      SPRING_DATASOURCE_PASSWORD: SomeSecretPassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    restart: always
+
   db:
-    container_name: car_service_book
+    container_name: car_service_book_database
     image: postgres:latest
     environment:
       POSTGRES_DB: car_service
@@ -12,6 +30,7 @@ services:
       - "5432:5432"
     volumes:
       - ./src/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
 
 volumes:
   postgres-db:
