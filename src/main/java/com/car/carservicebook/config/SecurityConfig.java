@@ -28,9 +28,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.car.carservicebook.config.Roles.ROLE_ADMIN;
 import static com.car.carservicebook.config.Roles.ROLE_USER;
-import static com.car.carservicebook.config.UrlsEnum.USER;
-import static com.car.carservicebook.config.UrlsEnum.NOT_LOGGED_IN;
+import static com.car.carservicebook.config.UrlsEnum.*;
 
 
 @Configuration
@@ -48,6 +48,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
+                                .requestMatchers(ADMIN.getUrls()).hasAuthority(ROLE_ADMIN.name()).anyRequest().authenticated()
                                 .requestMatchers(NOT_LOGGED_IN.getUrls()).permitAll()
                                 .requestMatchers(USER.getUrls()).hasAuthority(ROLE_USER.name()).anyRequest().authenticated()
 
