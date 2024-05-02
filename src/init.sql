@@ -1,4 +1,11 @@
 
+    create table admin (
+        id bigserial not null,
+        email varchar(255),
+        password varchar(255),
+        primary key (id)
+    );
+
     create table car (
         kilometer integer not null,
         motor float(53),
