@@ -1,5 +1,7 @@
 package com.car.carservicebook.service;
 
+import com.car.carservicebook.jpa.Car;
+import com.car.carservicebook.jpa.CarRepository;
 import com.car.carservicebook.jpa.User;
 import com.car.carservicebook.jpa.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import java.util.Optional;
 public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
+
+    private final CarRepository carRepository;
 
     @Override
     public Optional<User> getDataByEmail(@RequestBody String email) {
@@ -38,5 +42,20 @@ public class UserService implements UserServiceInterface {
     @Override
     public User findUserById(Long id) {
         return userRepository.findUserById(id);
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        Optional<User> findUser = Optional.ofNullable(userRepository.findUserById(id));
+
+        if (findUser.isPresent() && findUser.get().getId() > 0) {
+            List<Car> findCars = carRepository.findCarByUser_Id(findUser.get().getId());
+
+            for (Car car : findCars) {
+                carRepository.deleteById(car.getId());
+            }
+
+            userRepository.deleteById(id);
+        }
     }
 }
