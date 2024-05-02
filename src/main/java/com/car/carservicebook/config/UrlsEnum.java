@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public enum UrlsEnum {
 
+    ADMIN("/v1/admin/users", "/v1/admin/delete/{id}", "/v1/admin/delete/user/{id}", "/v1/admins"),
+
     USER("/v1/user/data","/v1//user/update", "/v1/car/all/{userId}", "/v1/car/{id}",
             "/v1/car/new","/v1/car/update","/v1/car/picture/{id}", "/v1/car/refuel/{carId}", "/v1/car/refuel/new",
             "/v1/car/refuel/update/{id}", "/v1/car/refuel/delete/{id}", "/v1/car/repair/{carId}", "/v1/car/repair/new", "/v1/car/repair/delete/{id}",
