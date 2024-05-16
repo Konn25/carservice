@@ -81,7 +81,7 @@ class CarControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(carController).build();
 
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository,carRepository);
         carService = new CarService(carRepository);
         carController = new CarController(modelMapper, carService, userService);
 

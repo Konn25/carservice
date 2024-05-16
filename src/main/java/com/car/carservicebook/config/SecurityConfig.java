@@ -48,9 +48,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers(ADMIN.getUrls()).hasAuthority(ROLE_ADMIN.name()).anyRequest().authenticated()
-                                .requestMatchers(NOT_LOGGED_IN.getUrls()).permitAll()
+                                .requestMatchers((NOT_LOGGED_IN.getUrls())).permitAll()
+                                .requestMatchers(ADMIN.getUrls()).hasAuthority(ROLE_ADMIN.name())
                                 .requestMatchers(USER.getUrls()).hasAuthority(ROLE_USER.name()).anyRequest().authenticated()
+
 
                 )
                 .authenticationProvider(authProvider())
@@ -58,9 +59,6 @@ public class SecurityConfig {
                 .cors( (cor) -> corsFilter())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        ;
-
-
 
         return http.build();
     }

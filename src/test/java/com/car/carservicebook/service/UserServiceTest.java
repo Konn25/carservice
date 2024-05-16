@@ -1,5 +1,6 @@
 package com.car.carservicebook.service;
 
+import com.car.carservicebook.jpa.CarRepository;
 import com.car.carservicebook.jpa.User;
 import com.car.carservicebook.jpa.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,9 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private CarRepository carRepository;
+
     @InjectMocks
     private UserService userService;
 
@@ -31,7 +35,7 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
 
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository,carRepository);
 
         newUser.setId(1L);
         newUser.setName("Test Elek");

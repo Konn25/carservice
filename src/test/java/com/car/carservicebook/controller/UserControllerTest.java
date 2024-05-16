@@ -2,6 +2,7 @@ package com.car.carservicebook.controller;
 
 import com.car.carservicebook.dto.UserDTO;
 
+import com.car.carservicebook.jpa.CarRepository;
 import com.car.carservicebook.jpa.User;
 import com.car.carservicebook.jpa.UserRepository;
 import com.car.carservicebook.service.UserService;
@@ -49,6 +50,9 @@ class UserControllerTest {
     private UserRepository userRepository;
 
     @Mock
+    private CarRepository carRepository;
+
+    @Mock
     private UserService userService;
 
     @InjectMocks
@@ -63,7 +67,7 @@ class UserControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository, carRepository);
 
         userController = new UserController(userService, modelMapper);
 
