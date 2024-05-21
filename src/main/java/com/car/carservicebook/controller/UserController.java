@@ -6,6 +6,7 @@ import com.car.carservicebook.jpa.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,24 @@ public class UserController {
     @Operation(summary = "Get user data by email", description  = "Return user data")
     public Optional<User> getUserDataByEmail(@PathVariable(name = "email") String email){
         return userService.getDataByEmail(email);
+    }
+
+    @GetMapping("/users")
+    @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
+    @Operation(summary = "Get user data by email", description  = "Return user data")
+    public List<User> getAllUser(){
+        return  userService.getAllUser();
+    }
+
+    @DeleteMapping("/user/delete/{id}")
+    @ResponseBody
+    @Transactional
+    @SecurityRequirement(name = "bearerToken")
+    @Operation(summary = "Delete an user by id", description = "Delete an user by id from the database")
+    public ResponseEntity<String> deletePictureById(@PathVariable("id") Long id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body("User deleted!");
     }
 
     @PostMapping("/user/new")
