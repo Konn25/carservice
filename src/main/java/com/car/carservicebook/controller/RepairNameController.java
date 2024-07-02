@@ -27,8 +27,6 @@ public class RepairNameController {
 
     private final RepairNameService repairNameService;
 
-    private final RepairService repairService;
-
     @GetMapping("/repair/name")
     @ResponseBody
     @SecurityRequirement(name = "bearerToken")
