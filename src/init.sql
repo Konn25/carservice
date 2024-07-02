@@ -19,6 +19,33 @@
         primary key (id)
     );
 
+    create table oil_consumption (
+        kilometer integer not null,
+        oil_consumption float(53),
+        car_id bigint,
+        id bigserial not null,
+        date varchar(255),
+        primary key (id)
+    );
+
+    create table ordered_parts (
+        price float(53),
+        car_id bigint,
+        id bigserial not null,
+        part_name_id bigint,
+        car_part_picture_name varchar(255),
+        company_name varchar(255),
+        date varchar(255),
+        manufacturer_name varchar(255),
+        primary key (id)
+    );
+
+    create table parts_name (
+        id bigserial not null,
+        name varchar(255),
+        primary key (id)
+    );
+
     create table picture (
         car_id bigint,
         id bigserial not null,
@@ -66,6 +93,11 @@
        add constraint FKc2osr9qmb46vr8pjyps6weii0 
        foreign key (user_id) 
        references users;
+
+    alter table if exists ordered_parts 
+       add constraint FKfekf3hdanwi136j7sl3xt4a14 
+       foreign key (part_name_id) 
+       references parts_name;
 
     alter table if exists picture 
        add constraint FK5rvwhn85jx8kr6wfobalp0sxr 
