@@ -75,7 +75,7 @@ class RepairNameControllerTest {
 
         repairNameService = new RepairNameService(repairNameRepository);
 
-        repairNameController = new RepairNameController(modelMapper, repairNameService, repairService);
+        repairNameController = new RepairNameController(modelMapper, repairNameService);
 
         repairName.setId(1L);
         repairName.setRepairName("Oil change");
