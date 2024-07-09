@@ -43,6 +43,7 @@
     create table parts_name (
         id bigserial not null,
         name varchar(255),
+        pictureurl varchar(255),
         primary key (id)
     );
 
