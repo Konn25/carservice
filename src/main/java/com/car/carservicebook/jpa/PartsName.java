@@ -23,6 +23,8 @@ public class PartsName {
 
     String name;
 
+    String pictureURL;
+
     @JsonIgnore
     @OneToMany
     @JoinColumn(name = "partNameId")
